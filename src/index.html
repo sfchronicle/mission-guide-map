@@ -38,10 +38,11 @@
     </div>
     <% } %>
     <% catName = d.Category; %>
-    <div class="mission-group <%=d.Category.toLowerCase().replace(/ /g,'')%> active">
+    <% catAbbrev = d.Category.toLowerCase().replace(/ /g,'') %>
+    <div class="mission-group <%=catAbbrev%> active">
       <div class="list-name"><%=d.Name %></div>
       <div class="list-item"><span class="list-hed">Recommended order: </span><%=d["Thing to order"]%></div>
-      <div class="list-item findme" id="findme-<%=d.Name.toLowerCase().replace(/ /g,'').replace(/-/g,'')%>"><i class="fa fa-hand-o-right"></i>Find me on map</div>
+      <div class="list-item findme" id="findme-<%=d.Name.toLowerCase().replace(/ /g,'').replace(/-/g,'')%>_cat<%=catAbbrev%>"><i class="fa fa-hand-o-right"></i>Find me on map</div>
       <% if (d.Website != "n/a"){ %>
         <div class="list-item"><a href="<%=d.Website%>" target="_blank"><i class="fa fa-external-link"></i><%=d.Website%></a></div>
       <% } %>

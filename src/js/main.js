@@ -110,8 +110,6 @@ missionData.forEach(function(d,idx) {
       tempicon = purpleIcon;
     } else if (d.Category == "Mission Classics") {
       tempicon = blueIcon;
-    } else {
-      console.log(d.Category);
     }
     var marker = L.marker([d.Lat, d.Lng], {icon: tempicon}).addTo(map).bindPopup(html_str).on('click', clickZoom);
     var markername = d.Name.toLowerCase().replace(/-/g,'').replace(/ /g,'').replace(/'/g, '').replace(/\./g,'');
@@ -120,10 +118,23 @@ missionData.forEach(function(d,idx) {
     markerNames.push(markername);
 });
 
+// event listener for each brewery that highlights the brewery on the map and calls the function to fill in the info at the top
+var qsa = s => Array.prototype.slice.call(document.querySelectorAll(s));
+qsa(".findme").forEach(function(group,index) {
+  group.addEventListener("click", function(e) {
+
+    var mapclassname = e.target.id.split("findme-")[1];
+    map.setView(markerArray[mapclassname].getLatLng());
+    markerArray[mapclassname].openPopup();
+
+  });
+});
+
 var buttons = document.getElementsByClassName("button");
 for (var idx=0; idx<buttons.length; idx++){
   var currentButton = buttons[idx];
   currentButton.addEventListener("click",function(){
+    map.closePopup();
     var activeClass = this.classList[1];
     $(".button").removeClass("active");
     this.classList.add("active");
