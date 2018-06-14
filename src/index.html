@@ -1,0 +1,64 @@
+<%= t.include("partials/_head.html") %>
+
+<!-- <link href="//fonts.googleapis.com/css?family=Fjalla+One|Pathway+Gothic+One" rel="stylesheet"></link> -->
+
+<!-- Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+
+<div class="map-banner">
+  <div class="map-title">Ultimate guide to Mission food</div>
+  <div class="button-container">
+    <% for (var idx=0; idx < json.mission_map.categoryHeds.length; idx++){ %>
+      <% var keyname = json.mission_map.categoryHeds[idx].key.toLowerCase().replace(/ /g,'') %>
+      <div class="button <%=keyname%>"><img class="icon-img" src="<%=json.mission_map.categoryHeds[idx].Icon%>"></img><%=json.mission_map.categoryHeds[idx].key%></div>
+    <% } %>
+    <div class="button all active">All Locations</div>
+  </div>
+
+</div>
+
+<div class="map-wrapper">
+  <div id="mission-map"></div>
+</div>
+<div class="sidebar" id="sidebar-top">
+  <% var catName = "" %>
+  <% json.Mission.forEach(function(d){ %>
+    <% if (d.Category != catName){ %>
+      <% for (var idx=0; idx < json.mission_map.categoryHeds.length; idx++){ %>
+        <% if (json.mission_map.categoryHeds[idx].key == d.Category){ %>
+          <% var keyname = json.mission_map.categoryHeds[idx].key.toLowerCase().replace(/ /g,'') %>
+          <div class="category-block <%=keyname%> active">
+          <div class="category-summary"><%=d.Category%></div>
+          <% json.mission_map.categoryHeds[idx].text.forEach(function(t,tidx){ %>
+            <div class="text-block"><%=t.value%></div>
+          <% }); %>
+        <% } %>
+      <% } %>
+    </div>
+    <% } %>
+    <% catName = d.Category; %>
+    <div class="mission-group <%=d.Category.toLowerCase().replace(/ /g,'')%> active">
+      <div class="list-name"><%=d.Name %></div>
+      <div class="list-item"><span class="list-hed">Recommended order: </span><%=d["Thing to order"]%></div>
+      <div class="list-item findme" id="findme-<%=d.Name.toLowerCase().replace(/ /g,'').replace(/-/g,'')%>"><i class="fa fa-hand-o-right"></i>Find me on map</div>
+      <% if (d.Website != "n/a"){ %>
+        <div class="list-item"><a href="<%=d.Website%>" target="_blank"><i class="fa fa-external-link"></i><%=d.Website%></a></div>
+      <% } %>
+      <% if (d.Phone != "n/a"){ %>
+        <div class="list-item"><a href="tel:<%=d.Phone%>"><i class="fa fa-phone"></i><%=d.Phone%></a></div>
+      <% } %>
+      <div class="list-item"><a href="https://www.google.com/maps/place/<%=d.Address%>" target="_blank" class="google-link"><i class="fa fa-map-marker"></i><%=d.Address%></a></div>
+    </div>
+  <% }); %>
+</div>
+
+<script>
+  var missionData = <%= JSON.stringify(json.Mission) %>
+</script>
+
+<script src="app.js" async></script>
+
+
+</body>
+</html>
