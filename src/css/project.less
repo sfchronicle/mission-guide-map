@@ -1,9 +1,9 @@
 @bestlatinamerican: #FFCC42;
 @bestdesserts: #EC368D;
 @missionclassics: #2ABCED;
-@hiddengems: #6b6ecf;
+@hasslefreespots: #6b6ecf;
 @bestofthenewmission: #FFA35E;
-@besttastingmenus: #547C5C;//#196B10;//#F55D3E;
+@besthighend: #547C5C;//#196B10;//#F55D3E;
 @bestvegetarian: #81AD54;
 // #FFA35E
 // #196B10
@@ -87,21 +87,28 @@
   padding: 10px;
   margin-top: 30px;
   &.bestlatinamerican { background: lighten(@bestlatinamerican,25%);}
-  &.bestdesserts { background: lighten(@bestdesserts,25%);}
-  &.hiddengems { background: lighten(@hiddengems,25%);}
-  &.bestofthenewmission { background: lighten(@bestofthenewmission,25%);}
-  &.besttastingmenus { background: lighten(@besttastingmenus,35%);}
-  &.bestvegetarian { background: lighten(@bestvegetarian,25%);}
-  &.missionclassics { background: lighten(@missionclassics,25%);}
+  &.bestdesserts { background: lighten(@bestdesserts,32%);}
+  &.hasslefreespots { background: lighten(@hasslefreespots,25%);}
+  &.bestofthenewmission { background: lighten(@bestofthenewmission,22%);}
+  &.besthighend { background: lighten(@besthighend,40%);}
+  &.bestvegetarian { background: lighten(@bestvegetarian,35%);}
+  &.missionclassics { background: lighten(@missionclassics,30%);}
   display: none;
   &.active {
     display: block;
   }
 }
 
+.fa-phone {
+  display: none;
+  @media @mobile {
+    display: inline-block;
+  }
+}
+
 .map-banner {
   position: fixed;
-  top: 0;
+  top: 37px;
   right: 0; left: 0;
   background: white;
   z-index: 99;
@@ -120,8 +127,8 @@
     position: relative;
   }
   .map-title {
-    font-size: 40px;
-    padding: 10px 0;
+    font-size: 30px;
+    padding: 20px 0;
     text-align: center;
     font-family: @bold-graphics;
     @media @mobile {
@@ -146,9 +153,9 @@
       &.all { border-bottom: 3px solid #333; }
       &.bestlatinamerican { border-bottom: 3px solid @bestlatinamerican;}
       &.bestdesserts { border-bottom: 3px solid @bestdesserts;}
-      &.hiddengems { border-bottom: 3px solid @hiddengems;}
+      &.hasslefreespots { border-bottom: 3px solid @hasslefreespots;}
       &.bestofthenewmission { border-bottom: 3px solid @bestofthenewmission;}
-      &.besttastingmenus { border-bottom: 3px solid @besttastingmenus;}
+      &.besthighend { border-bottom: 3px solid @besthighend;}
       &.bestvegetarian { border-bottom: 3px solid @bestvegetarian;}
       &.missionclassics { border-bottom: 3px solid @missionclassics;}
       &:hover {
@@ -159,9 +166,9 @@
         &.all { border: 3px solid #333; }
         &.bestlatinamerican { border: 3px solid @bestlatinamerican;}
         &.bestdesserts { border: 3px solid @bestdesserts;}
-        &.hiddengems { border: 3px solid @hiddengems;}
+        &.hasslefreespots { border: 3px solid @hasslefreespots;}
         &.bestofthenewmission { border: 3px solid @bestofthenewmission;}
-        &.besttastingmenus { border: 3px solid @besttastingmenus;}
+        &.besthighend { border: 3px solid @besthighend;}
         &.bestvegetarian { border: 3px solid @bestvegetarian;}
         &.missionclassics { border: 3px solid @missionclassics;}
       }
@@ -204,9 +211,9 @@
       &.all { border: 2px solid #333; }
       &.bestlatinamerican { border: 2px solid @bestlatinamerican;}
       &.bestdesserts { border: 2px solid @bestdesserts;}
-      &.hiddengems { border: 2px solid @hiddengems;}
+      &.hasslefreespots { border: 2px solid @hasslefreespots;}
       &.bestofthenewmission { border: 2px solid @bestofthenewmission;}
-      &.besttastingmenus { border: 2px solid @besttastingmenus;}
+      &.besthighend { border: 2px solid @besthighend;}
       &.bestvegetarian { border: 2px solid @bestvegetarian;}
       &.missionclassics { border: 2px solid @missionclassics;}
     }
@@ -228,22 +235,52 @@
       border-bottom: 1px solid @highlight;
     }
   }
-  .list-hed {
-    font-style: italic;
-    color: @dark-gray;
-    font-size: 16px;
-  }
   .category-summary {
     font-family: @logo2;
     border-bottom: 1px solid #333;
     font-size: 22px;
   }
+  .category-author {
+    font-size: 16px;
+    padding-top: 7px;
+    font-style: italic;
+  }
   .text-block {
     // font-family: @logo2;
     font-size: 16px;
-    padding-top: 5px;
+    padding-top: 7px;
   }
   a {
     border-bottom: 0;
+  }
+}
+
+.list-hed {
+  font-style: italic;
+  color: @dark-gray;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.credit-hed {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.divider {
+  border-bottom: 1px @light-gray solid;
+  max-width: 900px;
+  margin: auto;
+  margin-top: 30px;
+}
+
+.credits {
+  text-align: left;
+  margin: 30px 0 10px 0;
+  padding: 0;
+  width: 100%;
+  font-weight: 600;
+  a {
+    border-bottom: 1px solid @highlight;
   }
 }

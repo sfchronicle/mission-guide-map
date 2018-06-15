@@ -7,12 +7,11 @@
 <div class="map-banner" id="map-banner">
   <div class="map-topper">
     <img src="./assets/graphics/MISSIONBANNER.jpg" id="top-img"></img>
-    <div class="map-title">Ultimate guide to Mission food</div>
-    <%=t.include("./partials/_fullwidthmap-social.html")%>
+    <div class="map-title">The Complete Dining Guide to the Mission District</div>
   </div>
   <div class="button-container">
     <% for (var idx=0; idx < json.mission_map.categoryHeds.length; idx++){ %>
-      <% var keyname = json.mission_map.categoryHeds[idx].key.toLowerCase().replace(/ /g,'') %>
+      <% var keyname = json.mission_map.categoryHeds[idx].key.toLowerCase().replace(/ /g,'').replace(/-/g,'') %>
       <div class="button <%=keyname%>"><img class="icon-img" src="<%=json.mission_map.categoryHeds[idx].Icon%>"></img><%=json.mission_map.categoryHeds[idx].key%></div>
     <% } %>
     <div class="button all active">All Locations</div>
@@ -29,18 +28,20 @@
     <% if (d.Category != catName){ %>
       <% for (var idx=0; idx < json.mission_map.categoryHeds.length; idx++){ %>
         <% if (json.mission_map.categoryHeds[idx].key == d.Category){ %>
-          <% var keyname = json.mission_map.categoryHeds[idx].key.toLowerCase().replace(/ /g,'') %>
+          <% var keyname = json.mission_map.categoryHeds[idx].key.toLowerCase().replace(/ /g,'').replace(/-/g,'') %>
           <div class="category-block <%=keyname%> active">
           <div class="category-summary"><%=d.Category%></div>
           <% json.mission_map.categoryHeds[idx].text.forEach(function(t,tidx){ %>
             <div class="text-block"><%=t.value%></div>
           <% }); %>
+          <% console.log(d); %>
+          <div class="category-author">— <%=json.mission_map.categoryHeds[idx].Author%></div>
         <% } %>
       <% } %>
     </div>
     <% } %>
     <% catName = d.Category; %>
-    <% catAbbrev = d.Category.toLowerCase().replace(/ /g,'') %>
+    <% catAbbrev = d.Category.toLowerCase().replace(/ /g,'').replace(/-/g,'') %>
     <% nameAbbrev = d.Name.toLowerCase().replace(/-/g,'').replace(/ /g,'').replace(/'/g, '').replace(/\./g,'').replace(/\+/g,'').replace(/,/g,'').replace(/’/g,'').replace(/&/g,'') %>
     <div class="mission-group <%=catAbbrev%> active" id="sidebar-<%=nameAbbrev%>">
       <div class="list-name"><%=d.Name %>
@@ -51,12 +52,15 @@
           <a href="tel:<%=d.Phone%>"><i class="fa fa-phone"></i></a>
         <% } %>
       </div>
-      <div class="list-item"><span class="list-hed">Recommended order: </span><%=d["Thing to order"]%></div>
+      <div class="list-item"><span class="list-hed">What to order: </span><%=d["Thing to order"]%></div>
       <div class="list-item findme" id="findme-<%=nameAbbrev%>_cat<%=catAbbrev%>"><i class="fa fa-hand-o-right"></i>Find me on the map</div>
       <div class="list-item"><a href="https://www.google.com/maps/place/<%=d.Address%>" target="_blank" class="google-link"><i class="fa fa-map-marker"></i>Get directions</a></div>
 
     </div>
   <% }); %>
+
+  <%=t.include("./partials/_credits.html")%>
+
 </div>
 
 <script>

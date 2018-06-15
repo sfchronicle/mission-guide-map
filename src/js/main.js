@@ -1,4 +1,5 @@
 require("./lib/social"); //Do not delete
+var debounce = require("./lib/debounce");
 
 // setting parameters for the center of the map and initial zoom level
 if (screen.width <= 480) {
@@ -26,13 +27,13 @@ var map = L.map("mission-map", {
   dragging: true,
   // touchZoom: true
   // zoomControl: isMobile ? false : true,
-  scrollWheelZoom: false
+  // scrollWheelZoom: false
 }).setView([sf_lat,sf_long], zoom_deg);
 // window.map = map;
 
 // tooltip information
 function tooltip_function (d) {
-  var html_str = "<div class='name bold'>"+d.Name+"<a href="+d.Website+" target='_blank'><i class='fa fa-external-link' aria-hidden='true'></i></a></div><div class='season'>Recommended order: "+d["Thing to order"]+"</div>"
+  var html_str = "<div class='name bold'>"+d.Name+"<a href="+d.Website+" target='_blank'><i class='fa fa-external-link' aria-hidden='true'></i></a></div><div class='season'><span class='list-hed'>What to order: </span>"+d["Thing to order"]+"</div><div><span class='list-hed'>Address: </span>"+d.Address+"</div>"
   return html_str;
 }
 
@@ -47,7 +48,26 @@ L.control.zoom({
 }).addTo(map);
 
 // initializing the svg layer
-L.svg().addTo(map)
+L.svg().addTo(map);
+
+var bannerHeight = document.getElementById("map-banner").getBoundingClientRect().height+37;
+var imgHeight = document.getElementById("top-img").getBoundingClientRect().height;
+console.log(bannerHeight);
+console.log(imgHeight);
+
+function scrollTopImgAway(){
+  $("#top-img").slideUp(500);
+  $("#sidebar-top").animate({"padding-top": bannerHeight-imgHeight+"px"},500);
+  $("#map-wrapper").animate({"padding-top": bannerHeight-imgHeight+"px"},500);
+  // imgHeight = 0;
+}
+
+function scrollTopImgDown(){
+  $("#top-img").slideDown(500);
+  $("#sidebar-top").animate({"padding-top": bannerHeight+"px"},500);
+  $("#map-wrapper").animate({"padding-top": bannerHeight+"px"},500);
+  // imgHeight = document.getElementById("top-img").getBoundingClientRect().height;
+}
 
 var blueIcon = new L.Icon({
   iconUrl: './assets/graphics/marker-icon-blue.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
@@ -81,43 +101,36 @@ var redIcon = new L.Icon({
   iconUrl: './assets/graphics/marker-icon-red.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
 });
 
-var imgHeight = document.getElementById("top-img").getBoundingClientRect().height;
-
-// if (!mobiledevice){
-//   window.onscroll = function(){
-//     console.log("trying to scroll");
-//     console.log($(window).scrollTop());
-//     if ($(window).scrollTop() > 100){
-//       document.getElementById("map-wrapper").classList.add("fullsize");
-//       document.getElementById("mission-map").classList.add("fullsize");
-//       document.getElementById("sidebar-top").classList.add("fullsize");
-//       if (imgHeight != 0){
-//         // $("#top-img").animate({"height":"0px"},1000);
-//         $("#top-img").slideUp(500);
-//         $("#sidebar-top").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
-//         $("#map-wrapper").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
-//         imgHeight = 0;
-//       }
-//     } else {
-//       $("#top-img").slideDown(500);
-//       $("#sidebar-top").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
-//       $("#map-wrapper").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
-//       document.getElementById("map-wrapper").classList.remove("fullsize");
-//       document.getElementById("mission-map").classList.remove("fullsize");
-//       document.getElementById("sidebar-top").classList.remove("fullsize");
-//       imgHeight = document.getElementById("top-img").getBoundingClientRect().height;
-//     }
-//   }
-// }
+var scrollDir = "none";
+var inSidebar = 0;
+if (!mobiledevice){
+  // window.onscroll = function(){
+  // setTimeout(function(){
+    $('html').bind('mousewheel DOMMouseScroll', debounce(function (e) {
+      var delta = (e.originalEvent.wheelDelta || -e.originalEvent.detail);
+      if (delta < 0 && scrollDir != "down") {
+          console.log('You scrolled down');
+          scrollTopImgAway();
+          scrollDir = "down";
+      } else if (delta > 10 && scrollDir != "up" && inSidebar == 0) {
+          console.log('You scrolled up');
+          scrollTopImgDown();
+          scrollDir = "up";
+      }
+    },400));
+  // },1000)
+  $("#sidebar-top").mouseenter(function(){
+    console.log("you are in the sidebar");
+    inSidebar = 1;
+  }).mouseleave(function(){
+    inSidebar = 0;
+  });
+}
 
 function clickZoom(e) {
-    // $("#sidebar-top").animate({ scrollTop: 0 }, 600);
-    if (imgHeight != 0 && !mobiledevice){
-      // $("#top-img").animate({"height":"0px"},1000);
-      $("#top-img").slideUp(500);
-      $("#sidebar-top").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
-      $("#map-wrapper").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
-      imgHeight = 0;
+    if (!mobiledevice && scrollDir != "down"){
+      scrollTopImgAway();
+      scrollDir = "down";
     }
     if (mobiledevice){
       $('html, body').animate({ scrollTop: $("#mission-map").offset().top}, 600);
@@ -131,9 +144,11 @@ function clickZoom(e) {
         return item;
       }
     });
+
     var sidebarScroll = $("#sidebar-top").scrollTop();
-    var activemarkerTop = $("#sidebar-"+activemarker[0].split("MARKER")[1]).offset().top - document.getElementById("map-banner").getBoundingClientRect().height;
-    $("#sidebar-top").animate({ scrollTop: activemarkerTop + sidebarScroll }, 600);
+    var activemarkerTop = $("#sidebar-"+activemarker[0].split("MARKER")[1]).offset().top - document.getElementById("map-banner").getBoundingClientRect().height + 4;
+    $("#sidebar-top").animate({ scrollTop: activemarkerTop + sidebarScroll - 20 }, 600);
+
     $(".mission-group").removeClass("featured");
     $("#sidebar-"+activemarker[0].split("MARKER")[1]).addClass("featured");
 
@@ -155,9 +170,9 @@ missionData.forEach(function(d,idx) {
       tempicon = orangeIcon;
     } else if (d.Category == "Best Vegetarian"){
       tempicon = lightgreenIcon;
-    } else if (d.Category == "Best Tasting Menus"){
+    } else if (d.Category == "Best High-End"){
       tempicon = darkgreenIcon;
-    } else if (d.Category == "Hidden Gems"){
+    } else if (d.Category == "Hassle-Free Spots"){
       tempicon = purpleIcon;
     } else if (d.Category == "Mission Classics") {
       tempicon = blueIcon;
@@ -165,7 +180,7 @@ missionData.forEach(function(d,idx) {
     var marker = L.marker([d.Lat, d.Lng], {icon: tempicon}).addTo(map).bindPopup(html_str).on('click', clickZoom);
     var markername = d.Name.toLowerCase().replace(/-/g,'').replace(/ /g,'').replace(/'/g, '').replace(/\./g,'').replace(/\+/g,'').replace(/,/g,'').replace(/’/g,'').replace(/&/g,'');
     marker._icon.classList.add("MARKER"+markername);
-    var markercatname = markername+"_cat"+d.Category.toLowerCase().replace(/ /g,'');
+    var markercatname = markername+"_cat"+d.Category.toLowerCase().replace(/ /g,'').replace(/-/g,'');
     markerArray[markercatname] = marker;
     markerNames.push(markercatname);
 });
@@ -174,12 +189,9 @@ missionData.forEach(function(d,idx) {
 var qsa = s => Array.prototype.slice.call(document.querySelectorAll(s));
 qsa(".findme").forEach(function(group,index) {
   group.addEventListener("click", function(e) {
-    if (imgHeight != 0 && !mobiledevice){
-      // $("#top-img").animate({"height":"0px"},1000);
-      $("#top-img").slideUp(500);
-      $("#sidebar-top").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
-      $("#map-wrapper").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
-      imgHeight = 0;
+    if (!mobiledevice && scrollDir != "down"){
+      scrollTopImgAway();
+      scrollDir = "down";
     }
     $(".mission-group").removeClass("featured");
     this.closest(".mission-group").classList.add("featured")
@@ -211,11 +223,9 @@ for (var idx=0; idx<buttons.length; idx++){
       $("."+activeClass).addClass("active");
     }
     Object.keys(markerArray).forEach(function(ma,maIDX){
-      console.log(markerArray[ma]._icon.classList);
       if (activeClass == "all"){
         markerArray[ma]._icon.classList.remove("hide");
       } else {
-        console.log(ma);
         if(ma.split("_cat")[1] == activeClass) {
           markerArray[ma]._icon.classList.remove("hide");
         } else {
@@ -252,12 +262,14 @@ for (var idx=0; idx<buttons.length; idx++){
 })();
 
 if (!mobiledevice){
-  document.getElementById("sidebar-top").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height-10+"px";
-  document.getElementById("map-wrapper").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height+"px";
+  document.getElementById("sidebar-top").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height-10+37+"px";
+  document.getElementById("map-wrapper").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height+37+"px";
 }
 // handle event
 window.addEventListener("throttledResize", function() {
   if (!mobiledevice){
+    var bannerHeight = document.getElementById("map-banner").getBoundingClientRect().height;
+    var imgHeight = document.getElementById("top-img").getBoundingClientRect().height;
     document.getElementById("sidebar-top").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height-10+"px";
     document.getElementById("map-wrapper").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height+"px";
   }
