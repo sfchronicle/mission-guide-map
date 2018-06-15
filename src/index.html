@@ -1,15 +1,14 @@
 <%= t.include("partials/_head.html") %>
 
-<!-- <link href="//fonts.googleapis.com/css?family=Fjalla+One|Pathway+Gothic+One" rel="stylesheet"></link> -->
-
 <!-- Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 
 <div class="map-banner" id="map-banner">
   <div class="map-topper">
-    <img src="../assets/graphics/MISSIONBANNER.jpg" id="top-img"></img>
+    <img src="./assets/graphics/MISSIONBANNER.jpg" id="top-img"></img>
     <div class="map-title">Ultimate guide to Mission food</div>
+    <%=t.include("./partials/_fullwidthmap-social.html")%>
   </div>
   <div class="button-container">
     <% for (var idx=0; idx < json.mission_map.categoryHeds.length; idx++){ %>
@@ -64,7 +63,7 @@
   var missionData = <%= JSON.stringify(json.Mission) %>
 </script>
 
-<script src="app.js" async></script>
+<script src="app.js?4" async></script>
 
 
 </body>

@@ -8,8 +8,23 @@
 // #FFA35E
 // #196B10
 
+#fullwidth-social{
+  width:100%;
+  text-align:center;
+  padding: 10px 0;
+
+  .social{
+    display:inline-block;
+    padding:0 5px;
+
+    @media @mobile{
+      font-size: 17px;
+    }
+  }
+}
+
 .leaflet-marker-icon.hide{
-  opacity: 0.2;
+  display: none;
 }
 .leaflet-popup-content {
   font-family: @graphics;
@@ -45,19 +60,25 @@
   -o-box-sizing:      border-box;
   box-sizing:         border-box;
   height: 100vh;
+  &.fullsize {
+    position: fixed;
+    top: 0; bottom: 0; right: 0; left: 0;
+  }
+  @media @mobile {
+    height: 400px;
+  }
 }
 
 #mission-map {
   width: 60%;
   z-index: 0;
-  height: 100%;
-  @media @tablet {
-    width: 100%;
-    height: 500px;
-  }
+  // height: 1000px;
+  // &.fullsize {
+    height: 100%;
+    top: 0;
+  // }
   @media @mobile {
     width: 90%;
-    height: 400px;
     margin: auto;
   }
 }
@@ -88,6 +109,9 @@
   -moz-box-shadow: 0 0 6px 0 @dark-gray;
   box-shadow: 0 0 6px 0 @dark-gray;
   line-height: 1;
+  @media @mobile {
+    position: relative;
+  }
   .map-topper {
     img {
       width: 100%;
@@ -100,6 +124,12 @@
     padding: 10px 0;
     text-align: center;
     font-family: @bold-graphics;
+    @media @mobile {
+      font-size: 32px;
+      max-width: 80%;
+      margin: auto;
+      line-height: 1.2;
+    }
   }
   .button-container {
     text-align: center;
@@ -145,14 +175,23 @@
   position: absolute;
   top: 0;
   right: 0;
-  bottom: 0;
-  overflow-y: scroll;
   background: white;
   font-family: @graphics;
   padding: 20px;
   line-height: 1.4;
   text-align: left;
-  padding-top: 120px;
+  // height: 1000px;
+  // &.fullsize {
+    bottom: 0;
+    overflow-y: scroll;
+  // }
+  @media @mobile {
+    width: 100%;
+    position: relative;
+    padding-top: 0;
+    // max-height: 300px;
+    // overflow-y: scroll;
+  }
   .mission-group {
     padding-top: 20px;
     display: none;

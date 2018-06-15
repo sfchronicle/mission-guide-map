@@ -2,16 +2,18 @@ require("./lib/social"); //Do not delete
 
 // setting parameters for the center of the map and initial zoom level
 if (screen.width <= 480) {
-  var sf_lat = 37.77;
-  var sf_long = -122.43;
-  var zoom_deg = 11;
+  var mobiledevice = 1;
+  var sf_lat = 37.761260;
+  var sf_long = -122.414787;
+  var zoom_deg = 14;
 
   var top_of_map_scroll = 37;
 
 } else {
+  var mobiledevice = 0;
   var sf_lat = 37.7528682;
   var sf_long = -122.414615;
-  var zoom_deg = 13;
+  var zoom_deg = 14;
 
   var top_of_map_scroll = 0;
 }
@@ -48,47 +50,77 @@ L.control.zoom({
 L.svg().addTo(map)
 
 var blueIcon = new L.Icon({
-  iconUrl: '../assets/graphics/marker-icon-blue.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
+  iconUrl: './assets/graphics/marker-icon-blue.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
 });
 
 var darkgreenIcon = new L.Icon({
-  iconUrl: '../assets/graphics/marker-icon-darkgreen.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
+  iconUrl: './assets/graphics/marker-icon-darkgreen.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
 });
 
 var goldIcon = new L.Icon({
-  iconUrl: '../assets/graphics/marker-icon-gold.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
+  iconUrl: './assets/graphics/marker-icon-gold.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
 });
 
 var lightgreenIcon = new L.Icon({
-  iconUrl: '../assets/graphics/marker-icon-lightgreen.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
+  iconUrl: './assets/graphics/marker-icon-lightgreen.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
 });
 
 var orangeIcon = new L.Icon({
-  iconUrl: '../assets/graphics/marker-icon-orange.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
+  iconUrl: './assets/graphics/marker-icon-orange.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
 });
 
 var pinkIcon = new L.Icon({
-  iconUrl: '../assets/graphics/marker-icon-pink.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
+  iconUrl: './assets/graphics/marker-icon-pink.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
 });
 
 var purpleIcon = new L.Icon({
-  iconUrl: '../assets/graphics/marker-icon-purple.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
+  iconUrl: './assets/graphics/marker-icon-purple.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
 });
 
 var redIcon = new L.Icon({
-  iconUrl: '../assets/graphics/marker-icon-red.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
+  iconUrl: './assets/graphics/marker-icon-red.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
 });
 
 var imgHeight = document.getElementById("top-img").getBoundingClientRect().height;
 
+// if (!mobiledevice){
+//   window.onscroll = function(){
+//     console.log("trying to scroll");
+//     console.log($(window).scrollTop());
+//     if ($(window).scrollTop() > 100){
+//       document.getElementById("map-wrapper").classList.add("fullsize");
+//       document.getElementById("mission-map").classList.add("fullsize");
+//       document.getElementById("sidebar-top").classList.add("fullsize");
+//       if (imgHeight != 0){
+//         // $("#top-img").animate({"height":"0px"},1000);
+//         $("#top-img").slideUp(500);
+//         $("#sidebar-top").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
+//         $("#map-wrapper").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
+//         imgHeight = 0;
+//       }
+//     } else {
+//       $("#top-img").slideDown(500);
+//       $("#sidebar-top").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
+//       $("#map-wrapper").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
+//       document.getElementById("map-wrapper").classList.remove("fullsize");
+//       document.getElementById("mission-map").classList.remove("fullsize");
+//       document.getElementById("sidebar-top").classList.remove("fullsize");
+//       imgHeight = document.getElementById("top-img").getBoundingClientRect().height;
+//     }
+//   }
+// }
+
 function clickZoom(e) {
     // $("#sidebar-top").animate({ scrollTop: 0 }, 600);
-    if (imgHeight != 0){
+    if (imgHeight != 0 && !mobiledevice){
       // $("#top-img").animate({"height":"0px"},1000);
       $("#top-img").slideUp(500);
       $("#sidebar-top").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
       $("#map-wrapper").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
       imgHeight = 0;
+    }
+    if (mobiledevice){
+      $('html, body').animate({ scrollTop: $("#mission-map").offset().top}, 600);
     }
     var currentZoom = map.getZoom();
     map.setView(e.target.getLatLng(),currentZoom);
@@ -131,19 +163,21 @@ missionData.forEach(function(d,idx) {
     var marker = L.marker([d.Lat, d.Lng], {icon: tempicon}).addTo(map).bindPopup(html_str).on('click', clickZoom);
     var markername = d.Name.toLowerCase().replace(/-/g,'').replace(/ /g,'').replace(/'/g, '').replace(/\./g,'').replace(/\+/g,'').replace(/,/g,'').replace(/’/g,'').replace(/&/g,'');
     marker._icon.classList.add("MARKER"+markername);
-    markerArray[markername] = marker;
-    markerNames.push(markername);
+    var markercatname = markername+"_cat"+d.Category.toLowerCase().replace(/ /g,'');
+    markerArray[markercatname] = marker;
+    markerNames.push(markercatname);
 });
 
 // event listener for each brewery that highlights the brewery on the map and calls the function to fill in the info at the top
 var qsa = s => Array.prototype.slice.call(document.querySelectorAll(s));
 qsa(".findme").forEach(function(group,index) {
   group.addEventListener("click", function(e) {
-
     var mapclassname = e.target.id.split("findme-")[1];
     map.setView(markerArray[mapclassname].getLatLng());
     markerArray[mapclassname].openPopup();
-
+    if (mobiledevice){
+      $('html, body').animate({ scrollTop: $("#mission-map").offset().top}, 600);
+    }
   });
 });
 
@@ -165,9 +199,11 @@ for (var idx=0; idx<buttons.length; idx++){
       $("."+activeClass).addClass("active");
     }
     Object.keys(markerArray).forEach(function(ma,maIDX){
+      console.log(markerArray[ma]._icon.classList);
       if (activeClass == "all"){
         markerArray[ma]._icon.classList.remove("hide");
       } else {
+        console.log(ma);
         if(ma.split("_cat")[1] == activeClass) {
           markerArray[ma]._icon.classList.remove("hide");
         } else {
@@ -175,9 +211,10 @@ for (var idx=0; idx<buttons.length; idx++){
         }
       }
     });
-    // markerArray["market"+classes[1]]._icon.classList.add("hide");
     document.getElementById("sidebar-top").scrollTop = 0;
-    // $('html, body').animate({ scrollTop: $("#sidebar-top").offset().top - top_of_map_scroll}, 600);
+    if (mobiledevice){
+      $('html, body').animate({ scrollTop: $("#mission-map").offset().top}, 600);
+    }
 
   });
 }
@@ -202,11 +239,14 @@ for (var idx=0; idx<buttons.length; idx++){
     throttle("resize", "throttledResize");
 })();
 
-
-document.getElementById("sidebar-top").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height-10+"px";
-document.getElementById("map-wrapper").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height+"px";
+if (!mobiledevice){
+  document.getElementById("sidebar-top").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height-10+"px";
+  document.getElementById("map-wrapper").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height+"px";
+}
 // handle event
 window.addEventListener("throttledResize", function() {
+  if (!mobiledevice){
     document.getElementById("sidebar-top").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height-10+"px";
-    document.getElementById("map-wrapper").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height+"px"
+    document.getElementById("map-wrapper").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height+"px";
+  }
 });
