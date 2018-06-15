@@ -200,6 +200,7 @@ for (var idx=0; idx<buttons.length; idx++){
     map.setView([sf_lat,sf_long],zoom_deg);
     var activeClass = this.classList[1];
     $(".button").removeClass("active");
+    $(".mission-group").removeClass("featured");
     this.classList.add("active");
     if (activeClass == "all"){
       $(".category-block").addClass("active");
