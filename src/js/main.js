@@ -134,6 +134,8 @@ function clickZoom(e) {
     var sidebarScroll = $("#sidebar-top").scrollTop();
     var activemarkerTop = $("#sidebar-"+activemarker[0].split("MARKER")[1]).offset().top - document.getElementById("map-banner").getBoundingClientRect().height;
     $("#sidebar-top").animate({ scrollTop: activemarkerTop + sidebarScroll }, 600);
+    $(".mission-group").removeClass("featured");
+    $("#sidebar-"+activemarker[0].split("MARKER")[1]).addClass("featured");
 
 }
 
@@ -172,6 +174,15 @@ missionData.forEach(function(d,idx) {
 var qsa = s => Array.prototype.slice.call(document.querySelectorAll(s));
 qsa(".findme").forEach(function(group,index) {
   group.addEventListener("click", function(e) {
+    if (imgHeight != 0 && !mobiledevice){
+      // $("#top-img").animate({"height":"0px"},1000);
+      $("#top-img").slideUp(500);
+      $("#sidebar-top").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
+      $("#map-wrapper").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
+      imgHeight = 0;
+    }
+    $(".mission-group").removeClass("featured");
+    this.closest(".mission-group").classList.add("featured")
     var mapclassname = e.target.id.split("findme-")[1];
     map.setView(markerArray[mapclassname].getLatLng());
     markerArray[mapclassname].openPopup();

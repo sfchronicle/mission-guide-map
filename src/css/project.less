@@ -193,10 +193,22 @@
     // overflow-y: scroll;
   }
   .mission-group {
-    padding-top: 20px;
+    margin-top: 20px;
     display: none;
     &.active {
       display: block;
+    }
+    &.featured {
+      background: lighten(@light-gray,16%);
+      padding: 10px;
+      &.all { border: 2px solid #333; }
+      &.bestlatinamerican { border: 2px solid @bestlatinamerican;}
+      &.bestdesserts { border: 2px solid @bestdesserts;}
+      &.hiddengems { border: 2px solid @hiddengems;}
+      &.bestofthenewmission { border: 2px solid @bestofthenewmission;}
+      &.besttastingmenus { border: 2px solid @besttastingmenus;}
+      &.bestvegetarian { border: 2px solid @bestvegetarian;}
+      &.missionclassics { border: 2px solid @missionclassics;}
     }
   }
   .list-name {
