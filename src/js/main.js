@@ -9,13 +9,12 @@ if (screen.width <= 480) {
   var top_of_map_scroll = 37;
 
 } else {
-  var sf_lat = 37.7628682;
+  var sf_lat = 37.7528682;
   var sf_long = -122.414615;
-  var zoom_deg = 14;
+  var zoom_deg = 13;
 
   var top_of_map_scroll = 0;
 }
-
 
 // initialize map with center position and zoom levels
 var map = L.map("mission-map", {
@@ -25,7 +24,7 @@ var map = L.map("mission-map", {
   dragging: true,
   // touchZoom: true
   // zoomControl: isMobile ? false : true,
-  // scrollWheelZoom: false
+  scrollWheelZoom: false
 }).setView([sf_lat,sf_long], zoom_deg);
 // window.map = map;
 
@@ -80,12 +79,30 @@ var redIcon = new L.Icon({
   iconUrl: '../assets/graphics/marker-icon-red.png', iconSize: [20, 32], iconAnchor: [12, 32], popupAnchor: [-2, -30],
 });
 
+var imgHeight = document.getElementById("top-img").getBoundingClientRect().height;
+
 function clickZoom(e) {
+    // $("#sidebar-top").animate({ scrollTop: 0 }, 600);
+    if (imgHeight != 0){
+      // $("#top-img").animate({"height":"0px"},1000);
+      $("#top-img").slideUp(500);
+      $("#sidebar-top").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
+      $("#map-wrapper").animate({"padding-top": document.getElementById("map-banner").getBoundingClientRect().height-imgHeight+"px"},500);
+      imgHeight = 0;
+    }
     var currentZoom = map.getZoom();
     map.setView(e.target.getLatLng(),currentZoom);
-    $('html, body').animate({
-        scrollTop: $("#sidebar-top").offset().top - top_of_map_scroll
-    }, 600);
+
+    var classes = Array.from(e.target._icon.classList);
+    var activemarker = classes.filter(function(item){
+      if (item.match("MARKER")){
+        return item;
+      }
+    });
+    var sidebarScroll = $("#sidebar-top").scrollTop();
+    var activemarkerTop = $("#sidebar-"+activemarker[0].split("MARKER")[1]).offset().top - document.getElementById("map-banner").getBoundingClientRect().height;
+    $("#sidebar-top").animate({ scrollTop: activemarkerTop + sidebarScroll }, 600);
+
 }
 
 // adding markers
@@ -112,8 +129,8 @@ missionData.forEach(function(d,idx) {
       tempicon = blueIcon;
     }
     var marker = L.marker([d.Lat, d.Lng], {icon: tempicon}).addTo(map).bindPopup(html_str).on('click', clickZoom);
-    var markername = d.Name.toLowerCase().replace(/-/g,'').replace(/ /g,'').replace(/'/g, '').replace(/\./g,'');
-    markername = markername+"_cat"+d.Category.toLowerCase().replace(/ /g,'');
+    var markername = d.Name.toLowerCase().replace(/-/g,'').replace(/ /g,'').replace(/'/g, '').replace(/\./g,'').replace(/\+/g,'').replace(/,/g,'').replace(/’/g,'').replace(/&/g,'');
+    marker._icon.classList.add("MARKER"+markername);
     markerArray[markername] = marker;
     markerNames.push(markername);
 });
@@ -135,6 +152,7 @@ for (var idx=0; idx<buttons.length; idx++){
   var currentButton = buttons[idx];
   currentButton.addEventListener("click",function(){
     map.closePopup();
+    map.setView([sf_lat,sf_long],zoom_deg);
     var activeClass = this.classList[1];
     $(".button").removeClass("active");
     this.classList.add("active");
@@ -163,3 +181,32 @@ for (var idx=0; idx<buttons.length; idx++){
 
   });
 }
+
+// throttled resize event ----------------------------------------------------
+(function() {
+    var throttle = function(type, name, obj) {
+        obj = obj || window;
+        var running = false;
+        var func = function() {
+            if (running) { return; }
+            running = true;
+             requestAnimationFrame(function() {
+                obj.dispatchEvent(new CustomEvent(name));
+                running = false;
+            });
+        };
+        obj.addEventListener(type, func);
+    };
+
+    /* init - you can init any event */
+    throttle("resize", "throttledResize");
+})();
+
+
+document.getElementById("sidebar-top").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height-10+"px";
+document.getElementById("map-wrapper").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height+"px";
+// handle event
+window.addEventListener("throttledResize", function() {
+    document.getElementById("sidebar-top").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height-10+"px";
+    document.getElementById("map-wrapper").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height+"px"
+});

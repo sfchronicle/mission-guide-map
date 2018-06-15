@@ -6,8 +6,11 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 
-<div class="map-banner">
-  <div class="map-title">Ultimate guide to Mission food</div>
+<div class="map-banner" id="map-banner">
+  <div class="map-topper">
+    <img src="../assets/graphics/MISSIONBANNER.jpg" id="top-img"></img>
+    <div class="map-title">Ultimate guide to Mission food</div>
+  </div>
   <div class="button-container">
     <% for (var idx=0; idx < json.mission_map.categoryHeds.length; idx++){ %>
       <% var keyname = json.mission_map.categoryHeds[idx].key.toLowerCase().replace(/ /g,'') %>
@@ -18,7 +21,7 @@
 
 </div>
 
-<div class="map-wrapper">
+<div class="map-wrapper" id="map-wrapper">
   <div id="mission-map"></div>
 </div>
 <div class="sidebar" id="sidebar-top">
@@ -39,17 +42,20 @@
     <% } %>
     <% catName = d.Category; %>
     <% catAbbrev = d.Category.toLowerCase().replace(/ /g,'') %>
-    <div class="mission-group <%=catAbbrev%> active">
-      <div class="list-name"><%=d.Name %></div>
+    <% nameAbbrev = d.Name.toLowerCase().replace(/-/g,'').replace(/ /g,'').replace(/'/g, '').replace(/\./g,'').replace(/\+/g,'').replace(/,/g,'').replace(/’/g,'').replace(/&/g,'') %>
+    <div class="mission-group <%=catAbbrev%> active" id="sidebar-<%=nameAbbrev%>">
+      <div class="list-name"><%=d.Name %>
+        <% if (d.Website != "n/a"){ %>
+          <a href="<%=d.Website%>" target="_blank"><i class="fa fa-external-link"></i></a>
+        <% } %>
+        <% if (d.Phone != "n/a"){ %>
+          <a href="tel:<%=d.Phone%>"><i class="fa fa-phone"></i></a>
+        <% } %>
+      </div>
       <div class="list-item"><span class="list-hed">Recommended order: </span><%=d["Thing to order"]%></div>
-      <div class="list-item findme" id="findme-<%=d.Name.toLowerCase().replace(/ /g,'').replace(/-/g,'')%>_cat<%=catAbbrev%>"><i class="fa fa-hand-o-right"></i>Find me on map</div>
-      <% if (d.Website != "n/a"){ %>
-        <div class="list-item"><a href="<%=d.Website%>" target="_blank"><i class="fa fa-external-link"></i><%=d.Website%></a></div>
-      <% } %>
-      <% if (d.Phone != "n/a"){ %>
-        <div class="list-item"><a href="tel:<%=d.Phone%>"><i class="fa fa-phone"></i><%=d.Phone%></a></div>
-      <% } %>
-      <div class="list-item"><a href="https://www.google.com/maps/place/<%=d.Address%>" target="_blank" class="google-link"><i class="fa fa-map-marker"></i><%=d.Address%></a></div>
+      <div class="list-item findme" id="findme-<%=nameAbbrev%>_cat<%=catAbbrev%>"><i class="fa fa-hand-o-right"></i>Find me on the map</div>
+      <div class="list-item"><a href="https://www.google.com/maps/place/<%=d.Address%>" target="_blank" class="google-link"><i class="fa fa-map-marker"></i>Get directions</a></div>
+
     </div>
   <% }); %>
 </div>

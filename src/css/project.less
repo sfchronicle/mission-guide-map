@@ -38,11 +38,19 @@
   }
 }
 
+.map-wrapper {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing:    border-box;
+  -ms-box-sizing:     border-box;
+  -o-box-sizing:      border-box;
+  box-sizing:         border-box;
+  height: 100vh;
+}
+
 #mission-map {
   width: 60%;
-  height: 100vh;
   z-index: 0;
-  margin-top: 100px;
+  height: 100%;
   @media @tablet {
     width: 100%;
     height: 500px;
@@ -79,11 +87,19 @@
   -webkit-box-shadow: 0 0 6px 0 @dark-gray;
   -moz-box-shadow: 0 0 6px 0 @dark-gray;
   box-shadow: 0 0 6px 0 @dark-gray;
+  line-height: 1;
+  .map-topper {
+    img {
+      width: 100%;
+      line-height:1;
+    }
+    position: relative;
+  }
   .map-title {
-    font-size: 45px;
-    padding-top: 10px;
+    font-size: 40px;
+    padding: 10px 0;
     text-align: center;
-    font-family: @logo2;
+    font-family: @bold-graphics;
   }
   .button-container {
     text-align: center;
@@ -95,9 +111,8 @@
       }
       display: inline-block;
       font-family: @logo2;
-      font-weight: 600;
       margin: 3px 5px;
-      padding: 0 5px;
+      padding: 3px 5px 2px 5px;
       &.all { border-bottom: 3px solid #333; }
       &.bestlatinamerican { border-bottom: 3px solid @bestlatinamerican;}
       &.bestdesserts { border-bottom: 3px solid @bestdesserts;}
@@ -111,6 +126,14 @@
       }
       &.active {
         background: lighten(@light-gray,10%);
+        &.all { border: 3px solid #333; }
+        &.bestlatinamerican { border: 3px solid @bestlatinamerican;}
+        &.bestdesserts { border: 3px solid @bestdesserts;}
+        &.hiddengems { border: 3px solid @hiddengems;}
+        &.bestofthenewmission { border: 3px solid @bestofthenewmission;}
+        &.besttastingmenus { border: 3px solid @besttastingmenus;}
+        &.bestvegetarian { border: 3px solid @bestvegetarian;}
+        &.missionclassics { border: 3px solid @missionclassics;}
       }
     }
   }
@@ -140,11 +163,18 @@
   .list-name {
     font-size: 18px;
     font-weight: 600;
+    .fa {
+      color: @highlight;
+      padding-left: 5px;
+    }
   }
   .list-item {
     font-size: 16px;
     .fa {
       padding-right: 5px;
+    }
+    a {
+      border-bottom: 1px solid @highlight;
     }
   }
   .list-hed {
@@ -158,8 +188,11 @@
     font-size: 22px;
   }
   .text-block {
-    font-family: @logo2;
-    font-size: 18px;
+    // font-family: @logo2;
+    font-size: 16px;
     padding-top: 5px;
+  }
+  a {
+    border-bottom: 0;
   }
 }
