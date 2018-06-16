@@ -33,7 +33,11 @@ var map = L.map("mission-map", {
 
 // tooltip information
 function tooltip_function (d) {
-  var html_str = "<div class='name bold'>"+d.Name+"<a href="+d.Website+" target='_blank'><i class='fa fa-external-link' aria-hidden='true'></i></a></div><div class='season'><span class='list-hed'>What to order: </span>"+d["Thing to order"]+"</div><div><span class='list-hed'>Address: </span>"+d.Address+"</div>";
+  if (d.Website != "n/a"){
+    var html_str = "<div class='name bold'>"+d.Name+"<a href="+d.Website+" target='_blank'><i class='fa fa-external-link' aria-hidden='true'></i></a></div><div class='season'><span class='list-hed'>What to order: </span>"+d["Thing to order"]+"</div><div><span class='list-hed'>Address: </span>"+d.Address+"</div>";
+  } else {
+    var html_str = "<div class='name bold'>"+d.Name+"</div><div class='season'><span class='list-hed'>What to order: </span>"+d["Thing to order"]+"</div><div><span class='list-hed'>Address: </span>"+d.Address+"</div>";
+  }
   if (d.Capsules){
     html_str = html_str + "<div class='capsule'>"+d.Capsules+"</div>"
   }
@@ -152,9 +156,11 @@ function clickZoom(e) {
       }
     });
 
-    var sidebarScroll = $("#sidebar-top").scrollTop();
+    // var sidebarScroll = $("#sidebar-top").scrollTop();
+    // var activemarkerTop = $("#sidebar-"+activemarker[0].split("MARKER")[1]).offset().top - document.getElementById("map-banner").getBoundingClientRect().height + 4;
+    var sidebarScroll = $("#sidebar-top").scrollTop()-window.scrollY;
     var activemarkerTop = $("#sidebar-"+activemarker[0].split("MARKER")[1]).offset().top - document.getElementById("map-banner").getBoundingClientRect().height + 4;
-    $("#sidebar-top").animate({ scrollTop: activemarkerTop + sidebarScroll - 20 }, 600);
+    $("#sidebar-top").animate({ scrollTop: activemarkerTop + sidebarScroll - 50 }, 600);
 
     $(".mission-group").removeClass("featured");
     $("#sidebar-"+activemarker[0].split("MARKER")[1]).addClass("featured");
