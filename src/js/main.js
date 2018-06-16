@@ -27,13 +27,16 @@ var map = L.map("mission-map", {
   dragging: true,
   // touchZoom: true
   // zoomControl: isMobile ? false : true,
-  // scrollWheelZoom: false
+  scrollWheelZoom: false
 }).setView([sf_lat,sf_long], zoom_deg);
 // window.map = map;
 
 // tooltip information
 function tooltip_function (d) {
-  var html_str = "<div class='name bold'>"+d.Name+"<a href="+d.Website+" target='_blank'><i class='fa fa-external-link' aria-hidden='true'></i></a></div><div class='season'><span class='list-hed'>What to order: </span>"+d["Thing to order"]+"</div><div><span class='list-hed'>Address: </span>"+d.Address+"</div>"
+  var html_str = "<div class='name bold'>"+d.Name+"<a href="+d.Website+" target='_blank'><i class='fa fa-external-link' aria-hidden='true'></i></a></div><div class='season'><span class='list-hed'>What to order: </span>"+d["Thing to order"]+"</div><div><span class='list-hed'>Address: </span>"+d.Address+"</div>";
+  if (d.Capsules){
+    html_str = html_str + "<div class='capsule'>"+d.Capsules+"</div>"
+  }
   return html_str;
 }
 
@@ -58,14 +61,14 @@ console.log(imgHeight);
 function scrollTopImgAway(){
   $("#top-img").slideUp(500);
   $("#sidebar-top").animate({"padding-top": bannerHeight-imgHeight+"px"},500);
-  $("#map-wrapper").animate({"padding-top": bannerHeight-imgHeight+"px"},500);
+  $("#mission-map").animate({"top": bannerHeight-imgHeight+"px"},500);
   // imgHeight = 0;
 }
 
 function scrollTopImgDown(){
   $("#top-img").slideDown(500);
   $("#sidebar-top").animate({"padding-top": bannerHeight+"px"},500);
-  $("#map-wrapper").animate({"padding-top": bannerHeight+"px"},500);
+  $("#mission-map").animate({"top": bannerHeight+"px"},500);
   // imgHeight = document.getElementById("top-img").getBoundingClientRect().height;
 }
 
@@ -116,6 +119,8 @@ if (!mobiledevice){
           console.log('You scrolled up');
           scrollTopImgDown();
           scrollDir = "up";
+      } else if (delta > 20) {
+
       }
     },400));
   // },1000)
@@ -263,7 +268,7 @@ for (var idx=0; idx<buttons.length; idx++){
 
 if (!mobiledevice){
   document.getElementById("sidebar-top").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height-10+37+"px";
-  document.getElementById("map-wrapper").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height+37+"px";
+  document.getElementById("mission-map").style["top"] = document.getElementById("map-banner").getBoundingClientRect().height+37+"px";
 }
 // handle event
 window.addEventListener("throttledResize", function() {
@@ -271,6 +276,6 @@ window.addEventListener("throttledResize", function() {
     var bannerHeight = document.getElementById("map-banner").getBoundingClientRect().height;
     var imgHeight = document.getElementById("top-img").getBoundingClientRect().height;
     document.getElementById("sidebar-top").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height-10+"px";
-    document.getElementById("map-wrapper").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height+"px";
+    document.getElementById("mission-map").style["top"] = document.getElementById("map-banner").getBoundingClientRect().height+"px";
   }
 });

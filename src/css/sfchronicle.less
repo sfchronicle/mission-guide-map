@@ -48,8 +48,9 @@ a {
   img {
     border: none;
   }
-  :hover {
-    color: darken(@highlight,10%);
+  &:hover {
+    font-weight: 600;
+    // color: darken(@highlight,10%);
   }
 }
 
@@ -519,12 +520,14 @@ header {
   margin-bottom: 20px;
   font-size: 17px;
   font-family: @graphics;
+  .justify-content(center);
   @media @mobile {
     margin-bottom: 40px;
   }
 
   .story {
     .flex(0 0 25%);
+    padding: 10px;
 
     @media @mobile {
       .flex(1 1 50%)
@@ -544,12 +547,12 @@ header {
 // footer -------------------------------------------
 
 footer {
-  background: @charcoal;
+  // background: @charcoal;
   opacity: 0.95;
   padding: 0 10px;
   position: relative;
-  z-index: 99;
-  margin-top: 10px;
+  z-index: 1;
+  margin-top: 0;
   clear:both;
 
   .logo {

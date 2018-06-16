@@ -1,0 +1,12 @@
+<div class="dont-miss-hed">Read the rest of the series</div>
+<div class="dont-miss">
+  <% for (var idx=0; idx < json.mission_map.RelatedLinks.length; idx++){ %>
+    <% var d = json.mission_map.RelatedLinks[idx]; %>
+    <div class="story">
+      <a href="<%=d.Link%>" target="_blank">
+        <img src="https://s.hdnux.com/photos/73/77/06/<%=d.Photo%>/5/premium_landscape.jpg">
+        <div class="desc"><%=d.Headline%></div>
+      </a>
+    </div>
+  <% } %>
+</div>

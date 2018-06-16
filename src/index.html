@@ -6,8 +6,9 @@
 
 <div class="map-banner" id="map-banner">
   <div class="map-topper">
-    <img src="./assets/graphics/MISSIONBANNER.jpg" id="top-img"></img>
-    <div class="map-title">The Complete Dining Guide to the Mission District</div>
+    <img src="./assets/graphics/MISSIONBANNER.jpg" id="top-img" class="desktop-banner-img"></img>
+    <img src="./assets/graphics/MISSIONMOBILE.jpg" class="mobile-banner-img"></img>
+    <div class="map-title">The Complete Mission District Dining Guide</div>
   </div>
   <div class="button-container">
     <% for (var idx=0; idx < json.mission_map.categoryHeds.length; idx++){ %>
@@ -30,7 +31,7 @@
         <% if (json.mission_map.categoryHeds[idx].key == d.Category){ %>
           <% var keyname = json.mission_map.categoryHeds[idx].key.toLowerCase().replace(/ /g,'').replace(/-/g,'') %>
           <div class="category-block <%=keyname%> active">
-          <div class="category-summary"><%=d.Category%></div>
+          <a href="<%=json.mission_map.categoryHeds[idx].Link%>" target="_blank"><div class="category-summary"><%=d.Category%><i class="fa fa-external-link"></i></div></a>
           <% json.mission_map.categoryHeds[idx].text.forEach(function(t,tidx){ %>
             <div class="text-block"><%=t.value%></div>
           <% }); %>
@@ -59,9 +60,13 @@
     </div>
   <% }); %>
 
-  <%=t.include("./partials/_credits.html")%>
-
 </div>
+
+<div class="bottom-container">
+  <%=t.include("./partials/_relatedstories.html")%>
+  <%=t.include("./partials/_credits.html")%>
+</div>
+<%=t.include("./partials/_footer.html")%>
 
 <script>
   var missionData = <%= JSON.stringify(json.Mission) %>
