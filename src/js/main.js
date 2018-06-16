@@ -138,10 +138,12 @@ function clickZoom(e) {
       scrollDir = "down";
     }
     if (mobiledevice){
-      $('html, body').animate({ scrollTop: $("#mission-map").offset().top}, 600);
+      $('html, body').animate({ scrollTop: $("#mission-map").offset().top-37}, 600);
     }
-    var currentZoom = map.getZoom();
-    map.setView(e.target.getLatLng(),currentZoom);
+    if (!mobiledevice){
+      var currentZoom = map.getZoom();
+      map.setView(e.target.getLatLng(),currentZoom);
+    }
 
     var classes = Array.from(e.target._icon.classList);
     var activemarker = classes.filter(function(item){
@@ -278,4 +280,21 @@ window.addEventListener("throttledResize", function() {
     document.getElementById("sidebar-top").style["padding-top"] = document.getElementById("map-banner").getBoundingClientRect().height-10+"px";
     document.getElementById("mission-map").style["top"] = document.getElementById("map-banner").getBoundingClientRect().height+"px";
   }
+});
+
+// make sticky nav do smooth scrolling
+$(document).on('click', 'a[href^="#"]', function(e) {
+    // target element id
+    var id = $(this).attr('href');
+    // target element
+    var $id = $(id);
+    if ($id.length === 0) {
+        return;
+    }
+    // prevent standard hash navigation (avoid blinking in IE)
+    e.preventDefault();
+    // top position relative to the document
+    var pos = $(id).offset().top-37;
+    // animated top scrolling
+    $('body, html').animate({scrollTop: pos},1000);
 });
