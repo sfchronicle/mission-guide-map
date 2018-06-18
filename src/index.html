@@ -8,7 +8,7 @@
   <div class="map-topper">
     <img src="./assets/graphics/MISSIONBANNER.jpg" id="top-img" class="desktop-banner-img"></img>
     <img src="./assets/graphics/MISSIONMOBILE.jpg" class="mobile-banner-img"></img>
-    <div class="map-title">The Complete Mission District Dining Guide</div>
+    <div class="map-title">The Ultimate Mission District Dining Guide</div>
   </div>
   <div class="button-container">
     <% for (var idx=0; idx < json.mission_map.categoryHeds.length; idx++){ %>
@@ -35,7 +35,6 @@
           <% json.mission_map.categoryHeds[idx].text.forEach(function(t,tidx){ %>
             <div class="text-block"><%=t.value%></div>
           <% }); %>
-          <% console.log(d); %>
           <div class="category-author">— <%=json.mission_map.categoryHeds[idx].Author%></div>
         <% } %>
       <% } %>
@@ -72,7 +71,7 @@
   var missionData = <%= JSON.stringify(json.Mission) %>
 </script>
 
-<script src="app.js?6" async></script>
+<script src="app.js" async></script>
 
 
 </body>
